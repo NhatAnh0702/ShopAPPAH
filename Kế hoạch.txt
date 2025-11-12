@@ -1,0 +1,60 @@
+shop-app/
+│
+├── backend/
+│   ├── server.js
+│   ├── .env
+│   ├── config/
+│   │   └── db.js
+│   ├── models/
+│   │   ├── productModel.js
+│   │   ├── userModel.js
+│   │   ├── orderModel.js
+│   │   └── cartModel.js
+│   ├── controllers/
+│   │   ├── productController.js
+│   │   ├── userController.js
+│   │   ├── orderController.js
+│   │   └── cartController.js
+│   ├── routes/
+│   │   ├── productRoutes.js
+│   │   ├── userRoutes.js
+│   │   ├── orderRoutes.js
+│   │   └── cartRoutes.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   └── errorMiddleware.js
+│   └── utils/
+│       └── tokenUtils.js
+│
+├── frontend/
+│   ├── index.html              # Trang Home
+│   ├── product.html            # Chi tiết sản phẩm
+│   ├── cart.html               # Giỏ hàng
+│   ├── payment.html            # Thanh toán
+│   ├── profile.html            # Thông tin cá nhân
+│   ├── style.css
+│   └── js/
+│       ├── main.js             # JS chung (menu, auth)
+│       ├── home.js             # JS cho trang Home
+│       ├── product.js          # JS cho chi tiết sản phẩm
+│       ├── cart.js             # JS cho giỏ hàng
+│       ├── payment.js
+│       └── profile.js
+│
+└── package.json
+
+
+
+
+cd ShopAppAH
+mkdir frontend
+mkdir backend
+npm init -y
+
+npm install express mongoose dotenv cors bcrypt jsonwebtoken
+
+npm install --save-dev nodemon
+
+npm install express
+
+npm install dotenv
