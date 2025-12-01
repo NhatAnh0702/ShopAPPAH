@@ -50,3 +50,35 @@ connectDB();
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Mở trình duyệt mặc định tới trang chủ sau khi server khởi chạy
+const { exec } = require('child_process');
+const openUrl = (url) => {
+  const platform = process.platform;
+  let cmd;
+  if (platform === 'win32') {
+    // start is a cmd.exe internal command; give an empty title string
+    cmd = `start "" "${url}"`;
+  } else if (platform === 'darwin') {
+    cmd = `open "${url}"`;
+  } else {
+    // linux and others (may require xdg-open installed)
+    cmd = `xdg-open "${url}"`;
+  }
+
+  exec(cmd, (err) => {
+    if (err) {
+      console.warn('Could not automatically open browser:', err.message || err);
+    }
+  });
+};
+
+// Only attempt to auto-open when not running in CI and when a frontend exists
+if (process.env.NODE_ENV !== 'test') {
+  const frontendIndex = path.join(__dirname, '..', 'frontend', 'index.html');
+  if (fs.existsSync(frontendIndex)) {
+    const url = `http://localhost:${PORT}`;
+    // Delay briefly to ensure server is ready
+    setTimeout(() => openUrl(url), 300);
+  }
+}

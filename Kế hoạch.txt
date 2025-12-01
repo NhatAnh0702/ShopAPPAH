@@ -7,60 +7,63 @@ shop-app/
 │   │   └── db.js
 │   ├── models/
 │   │   ├── productModel.js
-│   │   ├── userModel.js
-│   │   ├── orderModel.js
-│   │   └── cartModel.js
-│   ├── controllers/
-│   │   ├── productController.js
-│   │   ├── userController.js
-│   │   ├── orderController.js
-│   │   └── cartController.js
-│   ├── routes/
-│   │   ├── productRoutes.js
-│   │   ├── userRoutes.js
-│   │   ├── orderRoutes.js
-│   │   └── cartRoutes.js
-│   ├── middleware/
-│   │   ├── authMiddleware.js
-│   │   └── errorMiddleware.js
-│   └── utils/
-│       └── tokenUtils.js
+shop-app/
 │
-├── frontend/
-│   ├── index.html              # Trang Home
-│   ├── product.html            # Chi tiết sản phẩm
-│   ├── cart.html               # Giỏ hàng
-│   ├── payment.html            # Thanh toán
-│   ├── profile.html            # Thông tin cá nhân
-│   ├── style.css
+├── backend/                          # (current state)
+│   ├── server.js                     # present
+│   ├── .env                          # present (in repo)
+│   ├── config/
+│   │   └── db.js                     # present
+│   ├── models/
+│   │   ├── productModel.js           # present
+│   │   └── userModel.js              # present
+│   │   └── orderModel.js             # MISSING (plan to add)
+│   │   └── cartModel.js              # MISSING (plan to add)
+│   ├── controllers/
+│   │   ├── productController.js      # present
+│   │   ├── authController.js         # present
+│   │   └── cartController.js         # present
+│   │   └── userController.js         # MISSING (plan to add)
+│   │   └── orderController.js        # MISSING (plan to add)
+│   ├── routes/
+│   │   ├── productRoutes.js          # present
+│   │   ├── authRoutes.js             # present
+│   │   └── cartRoutes.js             # present
+│   │   └── userRoutes.js             # MISSING (plan to add)
+│   │   └── orderRoutes.js            # MISSING (plan to add)
+│   ├── middleware/
+│   │   ├── authMiddleware.js         # present
+│   │   ├── adminMiddleware.js        # present
+│   │   └── uploadMiddleware.js       # present
+│   │   └── errorMiddleware.js        # MISSING (plan to add)
+│   ├── utils/                        # MISSING (plan to add tools/helpers)
+│   │   └── tokenUtils.js             # MISSING (plan to add)
+│   └── uploads/                      # present (static uploads)
+│
+├── frontend/                         # (current state)
+│   ├── index.html                    # Trang Home (present)
+│   ├── product.html                  # Chi tiết sản phẩm (present)
+│   ├── cart.html                     # Giỏ hàng (present)
+│   ├── login.html                    # Đăng nhập (present)
+│   ├── admin.html                    # Admin page (present)
+│   ├── profile.html                  # Thông tin cá nhân (present)
+│   ├── style.css                     # present
 │   └── js/
-│       ├── main.js             # JS chung (menu, auth)
-│       ├── home.js             # JS cho trang Home
-│       ├── product.js          # JS cho chi tiết sản phẩm
-│       ├── cart.js             # JS cho giỏ hàng
-│       ├── payment.js
-│       └── profile.js
+│       ├── main.js                   # present
+│       ├── home.js                   # present
+│       ├── product.js                # present
+│       ├── cart.js                   # present
+│       ├── login.js                  # present
+│       ├── admin.js                  # present
+│       └── profile.js                # present
+│       └── payment.js                # MISSING (plan to add)
+│   └── payment.html                  # MISSING (plan to add)
 │
 └── package.json
 
 
-
-
-cd ShopAppAH
-mkdir frontend
-mkdir backend
-npm init -y
-
+Thư viện cần chuẩn bị:
 npm install express mongoose dotenv cors bcrypt jsonwebtoken
-
 npm install --save-dev nodemon
-
 npm install express
-
 npm install dotenv
-
-
-
-run server: npm run dev
-
-host frontend bằng live server extension 
