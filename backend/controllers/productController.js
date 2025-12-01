@@ -1,22 +1,113 @@
-const Product = require("../models/productModel");
+// backend/controllers/productController.js
+const Product = require('../models/productModel');
+const path = require('path');
+const fs = require('fs');
+
+function buildImagePath(filename) {
+  if (!filename) return '';
+  return `/uploads/${filename}`;
+}
 
 // Lấy tất cả sản phẩm
-exports.getProducts = async (req, res) => {
-  const products = await Product.find();
-  res.json(products);
+const getProducts = async (req, res) => {
+  try {
+    const products = await Product.find().lean();
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Lỗi Server' });
+  }
+};
+
+// GET sản phẩm theo ID
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // Tạo mới sản phẩm
-exports.createProduct = async (req, res) => {
-  const { name, image, price, description, category } = req.body;
-  const newProduct = new Product({ name, image, price, description, category });
-  const saved = await newProduct.save();
-  res.status(201).json(saved);
+const createProduct = async (req, res) => {
+  try {
+    const { name, price, description, image } = req.body || {};
+    let imagePath = image || '';
+    if (req.file && req.file.filename) {
+      imagePath = buildImagePath(req.file.filename);
+    }
+
+    const product = new Product({ name, price, description, image: imagePath });
+    const newProduct = await product.save();
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 // Xóa sản phẩm
-exports.deleteProduct = async (req, res) => {
-  const { id } = req.params;
-  await Product.findByIdAndDelete(id);
-  res.json({ message: "Đã xóa sản phẩm" });
+const deleteProduct = async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+
+    // attempt to remove file if exists
+    if (product.image) {
+      const filename = product.image.replace(/^\/uploads\//, '');
+      const filePath = path.join(__dirname, '..', 'uploads', filename);
+      fs.unlink(filePath, (err) => {});
+    }
+
+    res.json({ message: "Xóa sản phẩm thành công" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// PUT cập nhật sản phẩm
+const updateProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name, price, description, image } = req.body || {};
+
+    const product = await Product.findById(id);
+    if (!product) return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+
+    // Determine image path
+    let imagePath = product.image || '';
+    if (req.file && req.file.filename) {
+      // new file uploaded -> set new path and delete old file
+      const newPath = buildImagePath(req.file.filename);
+      // delete old file if exists
+      if (product.image) {
+        const oldFilename = product.image.replace(/^\/uploads\//, '');
+        const oldFilePath = path.join(__dirname, '..', 'uploads', oldFilename);
+        fs.unlink(oldFilePath, (err) => {});
+      }
+      imagePath = newPath;
+    } else if (image) {
+      // No new file, but frontend sent an image URL (old one) -> keep it
+      imagePath = image;
+    }
+
+    product.name = name !== undefined ? name : product.name;
+    product.price = price !== undefined ? price : product.price;
+    product.description = description !== undefined ? description : product.description;
+    product.image = imagePath;
+
+    const updated = await product.save();
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+module.exports = { 
+    getProducts, 
+    getProductById, 
+    createProduct, 
+    deleteProduct, 
+    updateProduct 
 };

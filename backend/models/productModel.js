@@ -1,5 +1,5 @@
 // backend/models/productModel.js
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
   {
@@ -7,6 +7,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Tên sản phẩm là bắt buộc"],
       trim: true,
+    },
+    description: {
+      type: String,
+      default: "Chưa có mô tả",
     },
     price: {
       type: Number,
@@ -17,10 +21,6 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Ảnh sản phẩm là bắt buộc"],
       default: "default.jpg",
-    },
-    description: {
-      type: String,
-      default: "Chưa có mô tả",
     },
     category: {
       type: String,
@@ -40,6 +40,6 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model('Product', productSchema);
 
 module.exports = Product;

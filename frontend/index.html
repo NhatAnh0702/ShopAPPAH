@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>===============</title>
+    <title>==[DEMO WEB APP]==</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,14 +11,15 @@
     <header>
         <div class="logo"><h2>=========</h2></div>
         <nav>
-            <a href="#">Trang chủ</a>
-            <a href="#">Sản phẩm</a>
+            <a href="index.html">Trang chủ</a>
             <a href="#">Liên hệ</a>
-            <a href="#">Giỏ hàng</a>
+            <a href="#" onclick="goToCart(event)">Giỏ hàng</a>
         </nav>
         <div class="search-box">
-            <input type="text" placeholder="Tìm sản phẩm...">
+            <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
+            <button type="button" onclick="doSearch()">Tìm</button>
         </div>
+        <div class="user-info"></div>
     </header>
 
     <section class="hero">
@@ -29,8 +30,7 @@
 
     <section class="products">
         <h2>Sản phẩm nổi bật</h2>
-        <div class="product-list" id="product-list">
-        </div>
+        <div class="product-list" id="product-list"></div>
     </section>
 
     <section class="features">
@@ -56,6 +56,7 @@
         <p>Email: ==============</p>
     </footer>
 
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
 </body>
 </html>

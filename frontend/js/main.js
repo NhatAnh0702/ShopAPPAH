@@ -1,16 +1,67 @@
-const API_URL = "http://localhost:3000/api";
+// frontend/js/main.js
+// Định nghĩa Base URL cho API Backend (mặc định tương ứng với backend trên port 5000)
+const API_BASE_URL = 'http://localhost:5000/api';
 
+// Hàm định dạng giá tiền (Dùng chung cho cả home và admin)
+function formatPrice(v) {
+    if (v == null) return '0 ₫';
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v);
+}
+
+// Hàm Escape HTML (Dùng chung cho cả home và admin)
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, s => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[s]));
+}
+
+// Kiểm tra auth và hiển thị thông tin người dùng ở header
 function checkAuth() {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    document.querySelector(".user-info").innerHTML = `<a href="login.html">Đăng nhập</a>`;
-  } else {
-    document.querySelector(".user-info").innerHTML = `<a href="profile.html">Tài khoản</a>`;
-  }
+    const token = localStorage.getItem('token');
+    const userInfoEl = document.querySelector('.user-info');
+    if (!userInfoEl) return;
+    if (!token) {
+        userInfoEl.innerHTML = `<a href="login.html">Đăng nhập</a>`;
+    } else {
+        const userName = localStorage.getItem('userName');
+        const displayName = userName ? `${escapeHtml(userName)}` : 'Tài khoản';
+        const userRole = localStorage.getItem('userRole');
+        let adminLink = '';
+        if (userRole === 'admin') adminLink = ` <a href="admin.html">Admin</a> | `;
+        userInfoEl.innerHTML = `${adminLink}<a href="profile.html">${displayName}</a> | <a href="#" onclick="logout()">Logout</a>`;
+    }
 }
 
-function formatPrice(price) {
-  return price.toLocaleString("vi-VN") + "đ";
+function goToCart(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+        sessionStorage.setItem('redirectAfterLogin', 'cart.html');
+        window.location.href = 'login.html';
+        return;
+    }
+    window.location.href = 'cart.html';
 }
 
-document.addEventListener("DOMContentLoaded", checkAuth);
+function doSearch() {
+    const input = document.getElementById('header-search');
+    const q = input ? input.value.trim() : '';
+    const target = q ? `index.html?search=${encodeURIComponent(q)}` : 'index.html';
+    window.location.href = target;
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userRole');
+    window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+});

@@ -1,9 +1,23 @@
+/* --- GLOBAL STYLES --- */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4; /* Nền nhẹ nhàng cho tổng thể */
 }
 
+/* --- BUTTON BASE STYLES --- */
+/* Đồng bộ hóa style các nút bấm */
+.btn-primary, .btn-secondary, .btn-danger, .btn-add, .btn-buy, .product-card button {
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 2px; /* GIẢM RADIUS: Áp dụng 2px */
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+
+/* --- NAVIGATION & HEADER --- */
 header {
     background-color: #222;
     color: white;
@@ -25,8 +39,11 @@ header nav a:hover {
 
 .search-box input {
     padding: 5px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
 }
 
+/* --- HERO SECTION --- */
 .hero {
     background: url('banner.jpg') center/cover no-repeat;
     color: white;
@@ -44,6 +61,7 @@ header nav a:hover {
     margin-top: 20px;
 }
 
+/* --- PRODUCT LIST --- */
 .products {
     padding: 40px 20px;
     text-align: center;
@@ -53,26 +71,40 @@ header nav a:hover {
     margin-bottom: 20px;
 }
 
-.product-list {
-    display: flex;
-    flex-wrap: wrap;
+#product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
     justify-content: center;
-    gap: 20px;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
-.product {
-    border: 1px solid #ddd;
+.product-card {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background: #ffffff;
     border-radius: 8px;
-    width: 200px;
-    padding: 10px;
-    background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 180ms ease, box-shadow 180ms ease;
+    border: 1px solid #ececec;
+    box-sizing: border-box;
 }
 
-.product img {
+/* Hover effect: nhẹ nổi với đổ bóng và nâng nhẹ */
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.product-card img {
     width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
+    display: block;
 }
 
 .product h3 {
@@ -88,16 +120,13 @@ header nav a:hover {
 .product button {
     background: #222;
     color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 5px;
 }
 
 .product button:hover {
     background: #e91e63;
 }
 
+/* --- FEATURES SECTION --- */
 .features {
     background: #f9f9f9;
     padding: 40px 20px;
@@ -115,9 +144,176 @@ header nav a:hover {
     width: 200px;
 }
 
+/* --- FOOTER --- */
 footer {
     background: #222;
     color: white;
     text-align: center;
     padding: 20px;
 }
+
+/* ================================================= */
+/* --- PRODUCT DETAIL PAGE (product.html) --- */
+/* ================================================= */
+.product-container {
+    display: flex;
+    gap: 40px;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+}
+.product-image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 2px;
+}
+.product-card h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+.product-card p {
+    color: #e91e63;
+    font-weight: bold;
+}
+.product-card button {
+    background: #222;
+    color: white;
+    margin-top: auto; /* đẩy nút xuống đáy card */
+}
+
+.product-card button:hover {
+    background: #e91e63;
+}
+.action-buttons {
+    display: flex;
+    gap: 15px;
+}
+.btn-add { 
+    background-color: #f39c12; 
+    color: white; 
+    padding: 10px 20px; 
+}
+.btn-buy { 
+    background-color: #e74c3c; 
+    color: white; 
+    padding: 10px 20px; 
+}
+
+/* Responsive cho trang chi tiết */
+@media (max-width: 768px) {
+    .product-container { flex-direction: column; }
+}
+
+/* ================================================= */
+/* --- ADMIN PANEL STYLES (admin.html) --- */
+/* ================================================= */
+
+/* --- Admin Layout --- */
+.admin-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    /* BỎ BOX SHADOW */
+    border-radius: 2px; /* GIẢM RADIUS */
+    border: 1px solid #ddd; /* Thêm border thay cho shadow */
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+/* --- Table Styles --- */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+/* --- Button Classes (Admin) --- */
+.btn-primary { background: #3498db; }
+.btn-secondary { background: #95a5a6; }
+.btn-danger { background: #e74c3c; }
+
+.btn-icon { padding: 6px 10px; margin: 0 2px; }
+
+/* --- Form Styles --- */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+.form-group input, .form-group textarea { 
+    width: 100%; padding: 8px; border: 1px solid #ddd; 
+    border-radius: 2px; /* GIẢM RADIUS */
+}
+.form-actions { text-align: right; margin-top: 20px; }
+.form-actions button { margin-left: 10px; }
+
+/* --- Modal Styles (Quan trọng) --- */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: #fff;
+    align-items: center;
+    padding: 20px;
+    border-radius: 2px;
+    width: 500px;
+    max-width: 90%;
+    border: 1px solid #aaa; 
+}
+.small-modal { width: 350px; }
+
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.close-modal { font-size: 24px; cursor: pointer; }
+
+/* --- Toast Notification --- */
+#toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+.toast {
+    color: white; padding: 12px 24px; margin-top: 10px;
+    border-radius: 2px; /* GIẢM RADIUS */
+    opacity: 0; transition: opacity 0.3s;
+}
+.toast.success { background: #2ecc71; }
+.toast.error { background: #e74c3c; }
+.toast.show { opacity: 1; }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản trị sản phẩm</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h2>📦 Quản Lý Sản Phẩm</h2>
+            <div class="header-actions">
+                <a href="index.html" class="btn-secondary">Về trang chủ</a>
+                <button id="btn-add-new" class="btn-primary"><i class="fas fa-plus"></i> Thêm sản phẩm</button>
+            </div>
+        </header>
+
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th width="80">Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Mô tả</th>
+                        <th width="120">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="product-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modal-form" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Thêm sản phẩm</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="product-create-form" enctype="multipart/form-data">
+                    <input type="hidden" id="product-id">
+                    <div class="form-group">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" id="p-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Giá (VNĐ)</label>
+                        <input type="number" id="p-price" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ảnh sản phẩm</label>
+                        <input type="file" id="p-image-file" name="image" accept="image/*">
+                        <input type="hidden" id="p-image-url-old" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <textarea id="p-desc" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary close-modal-btn">Hủy</button>
+                        <button type="submit" class="btn-primary">Lưu lại</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-delete" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <h3>Xác nhận xóa</h3>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa sản phẩm <b id="delete-name"></b> không?</p>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary close-modal-btn">Hủy</button>
+                    <button type="button" id="confirm-delete-btn" class="btn-danger">Xóa ngay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>      
+    <script src="js/admin.js"></script>
+</body>
+</html>

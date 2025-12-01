@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>=========</h2></div>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="#">Sản phẩm</a>
+            <a href="#">Liên hệ</a>
+            <a href="#" onclick="goToCart(event)">Giỏ hàng</a>
+        </nav>
+        <div class="search-box">
+            <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
+            <button type="button" onclick="doSearch()">Tìm</button>
+        </div>
+        <div class="user-info"></div>
+    </header>
+
+    <main>
+        <div id="loading" style="text-align: center; margin-top: 50px;">Đang tải dữ liệu...</div>
+        
+        <div id="product-detail" class="product-container" style="display: none;">
+            <div class="product-image">
+                <img id="p-img" src="" alt="Sản phẩm">
+            </div>
+            
+            <div class="product-info">
+                <h1 id="p-name">Tên sản phẩm</h1>
+                <h2 id="p-price" style="color: #d35400;">0đ</h2>
+                <p id="p-desc">Mô tả sản phẩm...</p>
+                
+                <div class="quantity-control">
+                    <label>Số lượng:</label>
+                    <button type="button" onclick="changeQty(-1)">-</button>
+                    <input type="number" id="p-qty" value="1" min="1" readonly>
+                    <button type="button" onclick="changeQty(1)">+</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-add" onclick="handleAddToCart()">Thêm vào giỏ</button>
+                    <button class="btn-buy" onclick="handleBuyNow()">Mua ngay</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/product.js"></script>
+</body>
+</html>

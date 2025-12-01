@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>=========</h2></div>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="#">Liên hệ</a>
+            <a href="#" onclick="goToCart(event)">Giỏ hàng</a>
+        </nav>
+        <div class="search-box">
+            <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
+            <button type="button" onclick="doSearch()">Tìm</button>
+        </div>
+        <div class="user-info"></div>
+    </header>
+
+    <main style="max-width: 520px; margin: 40px auto; padding: 20px;">
+        <div style="display:flex; gap:12px; margin-bottom:12px;">
+            <button id="tab-login" style="flex:1; padding:8px;">Đăng nhập</button>
+            <button id="tab-register" style="flex:1; padding:8px;">Đăng ký</button>
+        </div>
+
+        <section id="login-section">
+            <h2>Đăng nhập</h2>
+            <form id="login-form">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required style="width:100%; padding:8px; margin:8px 0;">
+
+                <label for="password">Mật khẩu</label>
+                <input id="password" name="password" type="password" required style="width:100%; padding:8px; margin:8px 0;">
+
+                <button type="submit" style="padding:10px 16px; margin-top:10px;">Đăng nhập</button>
+            </form>
+        </section>
+
+        <section id="register-section" style="display:none;">
+            <h2>Đăng ký tài khoản</h2>
+            <form id="register-form">
+                <label for="name">Họ tên</label>
+                <input id="name" name="name" type="text" required style="width:100%; padding:8px; margin:8px 0;">
+
+                <label for="r-email">Email</label>
+                <input id="r-email" name="email" type="email" required style="width:100%; padding:8px; margin:8px 0;">
+
+                <label for="r-password">Mật khẩu</label>
+                <input id="r-password" name="password" type="password" required style="width:100%; padding:8px; margin:8px 0;">
+
+                <label for="r-password2">Nhập lại mật khẩu</label>
+                <input id="r-password2" name="password2" type="password" required style="width:100%; padding:8px; margin:8px 0;">
+
+                <button type="submit" style="padding:10px 16px; margin-top:10px;">Đăng ký</button>
+            </form>
+        </section>
+
+        <p id="login-message" style="color: red; margin-top:10px;"></p>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

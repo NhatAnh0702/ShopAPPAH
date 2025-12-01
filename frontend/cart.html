@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ hàng</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo"><h2>=========</h2></div>
+    <nav>
+      <a href="index.html">Trang chủ</a>
+      <a href="#">Liên hệ</a>
+      <a href="#" onclick="goToCart(event)">Giỏ hàng</a>
+    </nav>
+    <div class="search-box">
+      <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
+      <button type="button" onclick="doSearch()">Tìm</button>
+    </div>
+    <div class="user-info"></div>
+  </header>
+
+  <main style="max-width: 900px; margin: 24px auto; padding: 12px;">
+    <h2>Giỏ hàng của bạn</h2>
+    <div id="cart-list">
+      <p>Đang tải giỏ hàng...</p>
+    </div>
+    <div style="margin-top:20px; text-align:right;">
+      <strong>Tổng: <span id="cart-total">0đ</span></strong>
+      <button id="checkout-btn" style="margin-left:12px; padding:8px 12px;">Thanh toán</button>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>
