@@ -48,6 +48,15 @@ function goToCart(e) {
     window.location.href = 'cart.html';
 }
 
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const countEl = document.getElementById('cart-count');
+    if (countEl) {
+        countEl.innerText = `(${totalCount})`;
+    }
+}
+
 function doSearch() {
     const input = document.getElementById('header-search');
     const q = input ? input.value.trim() : '';
@@ -64,4 +73,4 @@ function logout() {
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
-});
+}, updateCartCount());

@@ -37,11 +37,11 @@ function renderProducts(products) {
 
     // Sử dụng map để tạo HTML string
     productListEl.innerHTML = products.map(p => `
-        <div class="product-card">
+        <div class="product-card" onclick="viewProduct('${p._id}')">
             <img src="${p.image || '/images/default.png'}" alt="${escapeHtml(p.name)}">
             <h3>${escapeHtml(p.name)}</h3>
             <p class="price">${formatPrice(p.price)}</p>
-            <button class="btn" onclick="viewProduct('${p._id}')">Xem chi tiết</button>
+            <button class="btn" >Xem chi tiết</button>
         </div>
     `).join('');
 }

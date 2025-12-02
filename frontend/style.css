@@ -3,44 +3,142 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* Nền nhẹ nhàng cho tổng thể */
+    background-color: #f4f4f4;
 }
 
 /* --- BUTTON BASE STYLES --- */
-/* Đồng bộ hóa style các nút bấm */
 .btn-primary, .btn-secondary, .btn-danger, .btn-add, .btn-buy, .product-card button {
     border: none;
     padding: 8px 16px;
     cursor: pointer;
-    border-radius: 2px; /* GIẢM RADIUS: Áp dụng 2px */
+    border-radius: 2px;
     transition: background-color 0.2s;
     font-size: 14px;
 }
 
-/* --- NAVIGATION & HEADER --- */
+/* --- HEADER CONTAINER --- */
 header {
-    background-color: #222;
+    background-color: #1a1a1a;
     color: white;
-    padding: 10px 20px;
+    height: 70px;
+    padding: 0 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* --- LOGO --- */
+header .logo h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #fff, #ccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- NAVIGATION --- */
+header nav {
+    display: flex;
+    gap: 30px;
 }
 
 header nav a {
-    color: white;
-    margin: 0 10px;
+    color: #e0e0e0;
     text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+header nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #e91e63;
+    transition: width 0.3s ease;
 }
 
 header nav a:hover {
-    text-decoration: underline;
+    color: #fff;
+}
+
+header nav a:hover::after {
+    width: 100%;
+}
+
+/* --- SEARCH BOX --- */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 25px;
+    padding: 2px;
+    overflow: hidden;
+    width: 300px;
+    transition: box-shadow 0.3s ease;
+}
+
+.search-box:focus-within {
+    box-shadow: 0 0 8px rgba(233, 30, 99, 0.5);
 }
 
 .search-box input {
-    padding: 5px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
+    border: none;
+    outline: none;
+    padding: 8px 15px;
+    flex-grow: 1;
+    font-size: 0.9rem;
+    color: #333;
+    background: transparent;
+}
+
+.search-box button {
+    background-color: #222;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-right: 2px;
+    transition: background 0.3s;
+    font-weight: 600;
+}
+
+.search-box button:hover {
+    background-color: #e91e63;
+}
+
+/* --- USER INFO --- */
+.user-info {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.user-info a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 10px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.user-info a:hover {
+    color: #e91e63;
 }
 
 /* --- HERO SECTION --- */
@@ -48,7 +146,7 @@ header nav a:hover {
     background: url('banner.jpg') center/cover no-repeat;
     color: white;
     text-align: center;
-    padding: 100px 20px;
+    padding: 20px 5px;
 }
 
 .hero h1 {
@@ -63,7 +161,7 @@ header nav a:hover {
 
 /* --- PRODUCT LIST --- */
 .products {
-    padding: 40px 20px;
+    padding: 10px 20px;
     text-align: center;
 }
 
@@ -76,7 +174,7 @@ header nav a:hover {
     grid-template-columns: repeat(auto-fill, 250px);
     justify-content: center;
     gap: 1rem;
-    padding: 1rem;
+    padding: 2rem;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -94,10 +192,24 @@ header nav a:hover {
     box-sizing: border-box;
 }
 
-/* Hover effect: nhẹ nổi với đổ bóng và nâng nhẹ */
+/* Hover effect: */
 .product-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.product-card button {
+    background: #222;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    margin-top: auto;
+}
+
+.product-card:hover button {
+    background: #e91e63;
 }
 
 .product-card img {
@@ -181,12 +293,20 @@ footer {
 .product-card button {
     background: #222;
     color: white;
-    margin-top: auto; /* đẩy nút xuống đáy card */
+    margin-top: auto;
 }
 
 .product-card button:hover {
     background: #e91e63;
 }
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
 .action-buttons {
     display: flex;
     gap: 15px;
@@ -217,9 +337,8 @@ footer {
     margin: 30px auto;
     padding: 20px;
     background: white;
-    /* BỎ BOX SHADOW */
-    border-radius: 2px; /* GIẢM RADIUS */
-    border: 1px solid #ddd; /* Thêm border thay cho shadow */
+    border-radius: 2px;
+    border: 1px solid #ddd;
 }
 
 .admin-header {
@@ -271,7 +390,7 @@ footer {
 .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
 .form-group input, .form-group textarea { 
     width: 100%; padding: 8px; border: 1px solid #ddd; 
-    border-radius: 2px; /* GIẢM RADIUS */
+    border-radius: 2px;
 }
 .form-actions { text-align: right; margin-top: 20px; }
 .form-actions button { margin-left: 10px; }
@@ -305,13 +424,13 @@ footer {
 .small-modal { width: 350px; }
 
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.close-modal { font-size: 24px; cursor: pointer; }
+.close-modal { float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
 
 /* --- Toast Notification --- */
 #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
 .toast {
     color: white; padding: 12px 24px; margin-top: 10px;
-    border-radius: 2px; /* GIẢM RADIUS */
+    border-radius: 2px;
     opacity: 0; transition: opacity 0.3s;
 }
 .toast.success { background: #2ecc71; }

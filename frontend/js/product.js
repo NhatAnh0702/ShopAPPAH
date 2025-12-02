@@ -10,7 +10,7 @@ const qtyInput = document.getElementById('p-qty');
 
 async function loadProductDetail() {
     if (!productId) {
-        alert('Không tìm thấy ID sản phẩm!');
+        if (window.CustomModal) await CustomModal.alert('Không tìm thấy ID sản phẩm!'); else alert('Không tìm thấy ID sản phẩm!');
         window.location.href = 'index.html';
         return;
     }
@@ -46,13 +46,20 @@ function changeQty(amount) {
     qtyInput.value = currentQty;
 }
 
-function isRequestLoggedIn() {
+async function isRequestLoggedIn() {
     const token = localStorage.getItem('token');
     if (!token) {
         // Lưu lại URL hiện tại để sau khi login quay lại đúng trang này
         sessionStorage.setItem('redirectAfterLogin', window.location.href);
-        
-        if(confirm("Bạn cần đăng nhập để thực hiện chức năng này. Đi đến trang đăng nhập?")) {
+
+        let go = true;
+        if (window.CustomModal) {
+            go = await CustomModal.confirm('Bạn cần đăng nhập để thực hiện chức năng này. Đi đến trang đăng nhập?', { title: 'Yêu cầu đăng nhập', okText: 'Đến đăng nhập', cancelText: 'Hủy' });
+        } else {
+            go = confirm('Bạn cần đăng nhập để thực hiện chức năng này. Đi đến trang đăng nhập?');
+        }
+
+        if (go) {
             window.location.href = 'login.html';
         }
         return false;
@@ -61,7 +68,7 @@ function isRequestLoggedIn() {
 }
 
 async function handleAddToCart() {
-    if (!isRequestLoggedIn()) return;
+    if (!(await isRequestLoggedIn())) return;
 
     const quantity = parseInt(qtyInput.value);
 
@@ -84,19 +91,19 @@ async function handleAddToCart() {
         const data = await res.json();
 
         if (res.ok) {
-            alert('Đã thêm vào giỏ hàng thành công!');
+            if (window.CustomModal) await CustomModal.alert('Đã thêm vào giỏ hàng thành công!'); else alert('Đã thêm vào giỏ hàng thành công!');
         } else {
-            alert(data.message || 'Lỗi khi thêm vào giỏ');
+            if (window.CustomModal) await CustomModal.alert(data.message || 'Lỗi khi thêm vào giỏ'); else alert(data.message || 'Lỗi khi thêm vào giỏ');
         }
 
     } catch (err) {
         console.error(err);
-        alert('Lỗi kết nối server');
+        if (window.CustomModal) await CustomModal.alert('Lỗi kết nối server'); else alert('Lỗi kết nối server');
     }
 }
 
 async function handleBuyNow() {
-    if (!isRequestLoggedIn()) return;
+    if (!(await isRequestLoggedIn())) return;
 
     const quantity = parseInt(qtyInput.value);
     const token = localStorage.getItem('token');

@@ -90,10 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
         openDeleteModal();
       }));
 
-      document.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', async (e) => {
         const id = btn.getAttribute('data-id');
         const p = productsCache.find(x => x._id === id);
-        if (!p) return alert('Không tìm thấy sản phẩm');
+        if (!p) {
+          if (window.CustomModal) await CustomModal.alert('Không tìm thấy sản phẩm'); else alert('Không tìm thấy sản phẩm');
+          return;
+        }
         if (inputId) inputId.value = p._id || '';
         if (inputName) inputName.value = p.name || '';
         if (inputPrice) inputPrice.value = p.price || '';
@@ -132,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch(url, { method, headers: { Authorization: `Bearer ${token}` }, body: formData });
         if (!res.ok) {
           const e = await res.json().catch(()=>({message:'Lỗi'}));
-          alert(e.message || 'Thao tác thất bại');
+          if (window.CustomModal) await CustomModal.alert(e.message || 'Thao tác thất bại'); else alert(e.message || 'Thao tác thất bại');
           return;
         }
         // success
@@ -142,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadProducts();
       } catch (err) {
         console.error(err);
-        alert('Lỗi khi lưu sản phẩm');
+        if (window.CustomModal) await CustomModal.alert('Lỗi khi lưu sản phẩm'); else alert('Lỗi khi lưu sản phẩm');
       }
     });
 
@@ -157,10 +160,62 @@ document.addEventListener('DOMContentLoaded', () => {
         loadProducts();
       } catch (err) {
         console.error(err);
-        alert('Lỗi khi xóa');
+        if (window.CustomModal) await CustomModal.alert('Lỗi khi xóa'); else alert('Lỗi khi xóa');
       }
     });
 
     // initial load
     loadProducts();
+    loadAdminOrders();
+
+    // --- Orders management for admin (reads from localStorage orders) ---
+    function loadAdminOrders() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const adminBody = document.getElementById('admin-orders-body');
+      if (!adminBody) return;
+
+      adminBody.innerHTML = '';
+
+      if (!orders || orders.length === 0) {
+        adminBody.innerHTML = '<tr><td colspan="5">Chưa có đơn hàng nào trong hệ thống.</td></tr>';
+        return;
+      }
+
+      orders.slice().reverse().forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td style="padding:10px; border-bottom:1px solid #eee">${escapeHtml(order.orderId || '')}</td>
+          <td style="padding:10px; border-bottom:1px solid #eee">${escapeHtml(order.customerName || 'Khách vãng lai')}</td>
+          <td style="padding:10px; border-bottom:1px solid #eee">${escapeHtml(order.date || '')}</td>
+          <td style="padding:10px; border-bottom:1px solid #eee; text-align:right">${formatCurrency(order.totalAmount || 0)}</td>
+          <td style="padding:10px; border-bottom:1px solid #eee">
+            <select onchange="updateOrderStatus('${escapeHtml(order.orderId || '')}', this.value)" class="status-select">
+              <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Chờ xử lý</option>
+              <option value="Shipping" ${order.status === 'Shipping' ? 'selected' : ''}>Đang giao</option>
+              <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Đã giao</option>
+              <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Đã hủy</option>
+            </select>
+          </td>
+        `;
+        adminBody.appendChild(row);
+      });
+    }
+
+    // updateOrderStatus exposed to window so inline onchange can call it
+    window.updateOrderStatus = async function(orderId, newStatus) {
+      let orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const idx = orders.findIndex(o => o.orderId === orderId);
+      if (idx === -1) {
+        if (window.CustomModal) await CustomModal.alert('Không tìm thấy đơn ' + orderId); else alert('Không tìm thấy đơn ' + orderId);
+        return;
+      }
+      orders[idx].status = newStatus;
+      localStorage.setItem('orders', JSON.stringify(orders));
+      if (window.CustomModal) await CustomModal.alert(`Đã cập nhật đơn ${orderId} thành trạng thái: ${newStatus}`); else alert(`Đã cập nhật đơn ${orderId} thành trạng thái: ${newStatus}`);
+      loadAdminOrders();
+    };
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    }
   });

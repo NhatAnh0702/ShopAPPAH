@@ -8,16 +8,21 @@
 </head>
 <body>
     <header>
-        <div class="logo"><h2>=========</h2></div>
+        <a class="logo" href="index.html">
+            <h2>SHOPAPP</h2> 
+        </a>
         <nav>
-            <a href="index.html">Trang chủ</a>
-            <a href="#">Sản phẩm</a>
-            <a href="#">Liên hệ</a>
-            <a href="#" onclick="goToCart(event)">Giỏ hàng</a>
+            <a href="index.html" class="nav-link">Trang chủ</a>
+            <a href="#" class="nav-link">Liên hệ</a>
+            <a href="#" onclick="goToCart(event)" class="nav-link cart-link">
+                Giỏ hàng <span id="cart-count">(0)</span>
+            </a>
         </nav>
         <div class="search-box">
             <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
-            <button type="button" onclick="doSearch()">Tìm</button>
+            <button type="button" onclick="doSearch()">
+                <i class="fa fa-search"></i> Tìm
+            </button>
         </div>
         <div class="user-info"></div>
     </header>
@@ -52,6 +57,7 @@
 
     <script src="js/main.js"></script>
     <script src="js/home.js"></script>
+    <script src="js/customModal.js"></script>
     <script src="js/product.js"></script>
 </body>
 </html>

@@ -8,17 +8,23 @@
 </head>
 <body>
   <header>
-    <div class="logo"><h2>=========</h2></div>
-    <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="#">Liên hệ</a>
-      <a href="#" onclick="goToCart(event)">Giỏ hàng</a>
-    </nav>
-    <div class="search-box">
-      <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
-      <button type="button" onclick="doSearch()">Tìm</button>
-    </div>
-    <div class="user-info"></div>
+    <a class="logo" href="index.html">
+            <h2>SHOPAPP</h2> 
+        </a>
+        <nav>
+            <a href="index.html" class="nav-link">Trang chủ</a>
+            <a href="#" class="nav-link">Liên hệ</a>
+            <a href="#" onclick="goToCart(event)" class="nav-link cart-link">
+                Giỏ hàng <span id="cart-count">(0)</span>
+            </a>
+        </nav>
+        <div class="search-box">
+            <input id="header-search" type="text" placeholder="Tìm sản phẩm...">
+            <button type="button" onclick="doSearch()">
+                <i class="fa fa-search"></i> Tìm
+            </button>
+        </div>
+        <div class="user-info"></div>
   </header>
 
   <main style="max-width:700px; margin:24px auto; padding:12px;">
@@ -26,6 +32,22 @@
     <div id="profile-container">
       <p>Đang tải thông tin...</p>
     </div>
+    <section style="margin-top:20px;">
+      <h3>Lịch sử đơn hàng</h3>
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Mã đơn</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Ngày đặt</th>
+            <th style="text-align:right; padding:8px; border-bottom:1px solid #ddd;">Tổng tiền</th>
+            <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Trạng thái</th>
+            <th style="text-align:center; padding:8px; border-bottom:1px solid #ddd;">Chi tiết</th>
+          </tr>
+        </thead>
+        <tbody id="order-history-body">
+        </tbody>
+      </table>
+    </section>
     <div style="margin-top:20px;">
       <button id="btn-logout" style="padding:8px 12px;">Đăng xuất</button>
     </div>
@@ -33,6 +55,23 @@
 
   <script src="js/main.js"></script>
   <script src="js/home.js"></script>
+  <script src="js/customModal.js"></script>
   <script src="js/profile.js"></script>
+  
+  <!-- Order detail modal -->
+  <div id="modal-order" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-order-title">Chi tiết đơn hàng</h3>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div class="modal-body" id="modal-order-body" style="max-height:60vh; overflow:auto;">
+        <!-- order items inserted here -->
+      </div>
+      <div class="modal-footer" style="margin-top:12px; text-align:right;">
+        <button class="btn-secondary close-modal-btn">Đóng</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
