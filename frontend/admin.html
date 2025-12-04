@@ -7,49 +7,63 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="admin-container">
-        <header class="admin-header">
-            <h2>📦 Quản Lý Sản Phẩm</h2>
-            <div class="header-actions">
-                <a href="index.html" class="btn-secondary">Về trang chủ</a>
-                <button id="btn-add-new" class="btn-primary"><i class="fas fa-plus"></i> Thêm sản phẩm</button>
-            </div>
-        </header>
+    <div class="admin-container admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">SHOPAPP Admin</div>
+            <nav class="sidebar-nav">
+                <button class="sidebar-link active" data-target="products-panel">Quản lý sản phẩm</button>
+                <button class="sidebar-link" data-target="orders-panel">Quản lý đơn hàng</button>
+            </nav>
+            <div style="flex:1"></div>
+            <div class="sidebar-footer"></div>
+        </aside>
 
-        <div class="table-responsive">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th width="80">Ảnh</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Mô tả</th>
-                        <th width="120">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody id="product-table-body">
-                    </tbody>
-            </table>
-        </div>
-        
-        <section style="margin-top:30px;">
-            <h2>Quản lý đơn hàng</h2>
-            <div class="table-responsive">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Mã đơn</th>
-                            <th>Khách hàng</th>
-                            <th>Ngày đặt</th>
-                            <th style="text-align:right">Tổng tiền</th>
-                            <th>Trạng thái (Cập nhật)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-orders-body">
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2 id="panel-title">📦 Quản lý sản phẩm</h2>
+                <div class="header-actions">
+                    <a href="index.html" class="btn-secondary">Về trang chủ</a>
+                    <button id="btn-add-new" class="btn-primary"><i class="fas fa-plus"></i> Thêm sản phẩm</button>
+                </div>
+            </header>
+
+            <section id="products-panel" class="panel" data-panel>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th width="80">Ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Danh mục</th>
+                                <th>Mô tả</th>
+                                <th width="120">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="orders-panel" class="panel" data-panel style="display:none; margin-top:18px;">
+                <h3>Danh sách đơn hàng</h3>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Ngày đặt</th>
+                                <th style="text-align:right">Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
     </div>
 
     <div id="modal-form" class="modal">
@@ -68,6 +82,15 @@
                     <div class="form-group">
                         <label>Giá (VNĐ)</label>
                         <input type="number" id="p-price" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Danh mục</label>
+                        <select id="p-category">
+                            <option value="Điện thoại">Điện thoại</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Phụ kiện">Phụ kiện</option>
+                            <option value="Khác" selected>Khác</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Ảnh sản phẩm</label>

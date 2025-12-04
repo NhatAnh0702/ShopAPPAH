@@ -290,6 +290,7 @@ footer {
     color: #e91e63;
     font-weight: bold;
 }
+.product-card .category { color:#555; font-weight:500; margin-top:4px; }
 .product-card button {
     background: #222;
     color: white;
@@ -329,6 +330,9 @@ footer {
 
 /* ================================================= */
 /* --- ADMIN PANEL STYLES (admin.html) --- */
+.filter-bar { display:flex; gap:8px; justify-content:center; padding:12px 16px; }
+.filter-btn { background:#eef0f2; color:#111; border:none; padding:8px 14px; border-radius:16px; cursor:pointer; font-weight:600; }
+.filter-btn:hover { background:#dfe3e6; }
 /* ================================================= */
 
 /* --- Admin Layout --- */
@@ -340,6 +344,16 @@ footer {
     border-radius: 2px;
     border: 1px solid #ddd;
 }
+
+/* Sidebar layout for admin */
+.admin-layout { display: flex; gap: 20px; align-items: stretch; }
+.admin-sidebar { width: 220px; background:#0f2540; color: #fff; border-radius:4px; padding:16px; display:flex; flex-direction:column; }
+.sidebar-brand { font-weight:700; margin-bottom:12px; }
+.sidebar-nav { display:flex; flex-direction:column; gap:6px; }
+.sidebar-link { background:transparent; color:#cfe6ff; border:none; text-align:left; padding:8px 10px; border-radius:4px; cursor:pointer; font-weight:600; }
+.sidebar-link.active, .sidebar-link:hover { background:#133a63; color:#fff; }
+.admin-main { flex:1; }
+.sidebar-footer { margin-top:12px; }
 
 .admin-header {
     display: flex;
@@ -391,6 +405,10 @@ footer {
 .form-group input, .form-group textarea { 
     width: 100%; padding: 8px; border: 1px solid #ddd; 
     border-radius: 2px;
+}
+.form-group select {
+    width: 100%; padding: 8px; border: 1px solid #ddd;
+    border-radius: 2px; background:#fff;
 }
 .form-actions { text-align: right; margin-top: 20px; }
 .form-actions button { margin-left: 10px; }

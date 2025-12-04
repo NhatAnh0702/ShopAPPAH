@@ -20,4 +20,17 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
+const adminMiddleware = (req, res, next) => {
+  if (!req.user) return res.status(401).json({ message: 'Unauthorized' });
+  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Forbidden' });
+  next();
+};
+
+// Attach named properties so callers can do either:
+// const auth = require('./authMiddleware'); // use as function middleware
+// or
+// const { protect, admin } = require('./authMiddleware');
+authMiddleware.protect = authMiddleware;
+authMiddleware.admin = adminMiddleware;
+
 module.exports = authMiddleware;

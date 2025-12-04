@@ -38,13 +38,12 @@
             <div class="product-info">
                 <h1 id="p-name">Tên sản phẩm</h1>
                 <h2 id="p-price" style="color: #d35400;">0đ</h2>
+                <p><strong>Danh mục:</strong> <span id="p-category">Khác</span></p>
                 <p id="p-desc">Mô tả sản phẩm...</p>
                 
                 <div class="quantity-control">
                     <label>Số lượng:</label>
-                    <button type="button" onclick="changeQty(-1)">-</button>
-                    <input type="number" id="p-qty" value="1" min="1" readonly>
-                    <button type="button" onclick="changeQty(1)">+</button>
+                    <input type="number" id="p-qty" value="1" min="1" step="1" inputmode="numeric" pattern="[0-9]*" aria-label="Số lượng">
                 </div>
 
                 <div class="action-buttons">

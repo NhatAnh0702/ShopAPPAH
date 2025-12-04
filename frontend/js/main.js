@@ -49,12 +49,33 @@ function goToCart(e) {
 }
 
 function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const countEl = document.getElementById('cart-count');
-    if (countEl) {
-        countEl.innerText = `(${totalCount})`;
-    }
+    // Try to get cart count from server when user is logged in. Fallback to localStorage cart.
+    (async () => {
+        let totalCount = 0;
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/cart`, { headers: { Authorization: `Bearer ${token}` } });
+                if (res.ok) {
+                    const data = await res.json();
+                    const items = data.cart || [];
+                    totalCount = items.reduce((sum, it) => sum + (it.quantity || 0), 0);
+                }
+            } catch (err) {
+                console.warn('Không thể lấy cart từ server, dùng localStorage nếu có', err);
+            }
+        }
+
+        if (!token) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            totalCount = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+        }
+
+        const countEl = document.getElementById('cart-count');
+        if (countEl) {
+            countEl.innerText = `(${totalCount})`;
+        }
+    })();
 }
 
 function doSearch() {
@@ -73,4 +94,5 @@ function logout() {
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
-}, updateCartCount());
+    updateCartCount();
+});

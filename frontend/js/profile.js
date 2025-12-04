@@ -31,37 +31,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   };
 
-  function loadOrderHistory() {
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+  let myOrders = [];
+
+  async function loadOrderHistory() {
     const orderBody = document.getElementById('order-history-body');
     if (!orderBody) return;
-
     orderBody.innerHTML = '';
 
-    if (orders.length === 0) {
-      orderBody.innerHTML = '<tr><td colspan="5">Bạn chưa có đơn hàng nào.</td></tr>';
-      return;
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        orderBody.innerHTML = '<tr><td colspan="5">Vui lòng đăng nhập để xem đơn hàng.</td></tr>';
+        return;
+      }
+      const res = await fetch(`${API_BASE_URL}/orders/my`, { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) {
+        if (res.status === 401) {
+          orderBody.innerHTML = '<tr><td colspan="5">Vui lòng đăng nhập để xem đơn hàng.</td></tr>';
+          return;
+        }
+        throw new Error('Không thể tải lịch sử đơn hàng');
+      }
+      myOrders = await res.json();
+
+      if (!Array.isArray(myOrders) || myOrders.length === 0) {
+        orderBody.innerHTML = '<tr><td colspan="5">Bạn chưa có đơn hàng nào.</td></tr>';
+        return;
+      }
+
+      myOrders.slice().reverse().forEach(order => {
+        const row = document.createElement('tr');
+
+        let statusColor = 'black';
+        if (order.status === 'Pending') statusColor = '#f39c12';
+        else if (order.status === 'Shipping') statusColor = '#3498db';
+        else if (order.status === 'Delivered') statusColor = '#27ae60';
+        else if (order.status === 'Cancelled') statusColor = '#c0392b';
+
+        row.innerHTML = `
+          <td style="padding:8px; border-bottom:1px solid #eee;">${escapeHtml(order._id || '')}</td>
+          <td style="padding:8px; border-bottom:1px solid #eee;">${escapeHtml(new Date(order.createdAt).toLocaleString('vi-VN') || '')}</td>
+          <td style="padding:8px; border-bottom:1px solid #eee; text-align:right;">${formatCurrency(order.totalAmount || 0)}</td>
+          <td style="padding:8px; border-bottom:1px solid #eee; color: ${statusColor}; font-weight:bold;">${escapeHtml(translateStatus(order.status))}</td>
+          <td style="padding:8px; border-bottom:1px solid #eee; text-align:center;"><button type="button" onclick="viewOrderDetail('${escapeHtml(order._id || '')}')">Xem</button></td>
+        `;
+
+        orderBody.appendChild(row);
+      });
+
+    } catch (err) {
+      console.error(err);
+      orderBody.innerHTML = '<tr><td colspan="5">Đã có lỗi khi tải đơn hàng.</td></tr>';
     }
-
-    orders.slice().reverse().forEach(order => {
-      const row = document.createElement('tr');
-
-      let statusColor = 'black';
-      if (order.status === 'Pending') statusColor = '#f39c12';
-      else if (order.status === 'Shipping') statusColor = '#3498db';
-      else if (order.status === 'Delivered') statusColor = '#27ae60';
-      else if (order.status === 'Cancelled') statusColor = '#c0392b';
-
-      row.innerHTML = `
-        <td style="padding:8px; border-bottom:1px solid #eee;">${escapeHtml(order.orderId || '')}</td>
-        <td style="padding:8px; border-bottom:1px solid #eee;">${escapeHtml(order.date || '')}</td>
-        <td style="padding:8px; border-bottom:1px solid #eee; text-align:right;">${formatCurrency(order.totalAmount || 0)}</td>
-        <td style="padding:8px; border-bottom:1px solid #eee; color: ${statusColor}; font-weight:bold;">${escapeHtml(translateStatus(order.status))}</td>
-        <td style="padding:8px; border-bottom:1px solid #eee; text-align:center;"><button type="button" onclick="viewOrderDetail('${escapeHtml(order.orderId || '')}')">Xem</button></td>
-      `;
-
-      orderBody.appendChild(row);
-    });
   }
 
   // Order modal handling
@@ -77,16 +98,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   window.viewOrderDetail = async function(orderId) {
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
-    const order = (orders || []).find(o => o.orderId === orderId);
+    let order = (myOrders || []).find(o => o._id === orderId);
+    if (!order) {
+      // fallback: try fetching single order
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_BASE_URL}/orders/${orderId}`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.ok) order = await res.json();
+      } catch (e) {
+        console.warn('Không thể lấy chi tiết đơn hàng', e);
+      }
+    }
+
     if (!order) {
       if (window.CustomModal) await CustomModal.alert('Không tìm thấy đơn hàng ' + orderId); else alert('Không tìm thấy đơn hàng ' + orderId);
       return;
     }
 
-    if (modalTitle) modalTitle.innerText = `Đơn ${order.orderId} — ${order.date || ''}`;
+    if (modalTitle) modalTitle.innerText = `Đơn ${order._id} — ${new Date(order.createdAt).toLocaleString('vi-VN') || ''}`;
 
-    // build items list
     const items = order.items || [];
     const itemsHtml = items.map(it => `
       <div style="display:flex; gap:12px; align-items:center; padding:8px 0; border-bottom:1px solid #f0f0f0;">

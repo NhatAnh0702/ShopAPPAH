@@ -8,10 +8,15 @@ function buildImagePath(filename) {
   return `/uploads/${filename}`;
 }
 
-// Lấy tất cả sản phẩm
+// Lấy tất cả sản phẩm (hỗ trợ lọc theo category qua query ?category=)
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find().lean();
+    const { category } = req.query || {};
+    const filter = {};
+    if (category && String(category).trim()) {
+      filter.category = String(category).trim();
+    }
+    const products = await Product.find(filter).lean();
     res.json(products);
   } catch (err) {
     console.error(err);
@@ -33,13 +38,13 @@ const getProductById = async (req, res) => {
 // Tạo mới sản phẩm
 const createProduct = async (req, res) => {
   try {
-    const { name, price, description, image } = req.body || {};
+    const { name, price, description, image, category } = req.body || {};
     let imagePath = image || '';
     if (req.file && req.file.filename) {
       imagePath = buildImagePath(req.file.filename);
     }
 
-    const product = new Product({ name, price, description, image: imagePath });
+    const product = new Product({ name, price, description, image: imagePath, category: category || 'Khác' });
     const newProduct = await product.save();
     res.status(201).json(newProduct);
   } catch (error) {
@@ -70,7 +75,7 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, price, description, image } = req.body || {};
+    const { name, price, description, image, category } = req.body || {};
 
     const product = await Product.findById(id);
     if (!product) return res.status(404).json({ message: "Sản phẩm không tồn tại" });
@@ -96,6 +101,7 @@ const updateProduct = async (req, res) => {
     product.price = price !== undefined ? price : product.price;
     product.description = description !== undefined ? description : product.description;
     product.image = imagePath;
+    product.category = category !== undefined ? category : product.category;
 
     const updated = await product.save();
     res.json(updated);

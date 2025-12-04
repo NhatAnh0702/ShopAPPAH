@@ -45,6 +45,16 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     }
 });
 
+const deleteOrder = asyncHandler(async (req, res) => {
+    // Use findByIdAndDelete to avoid relying on document instance methods
+    const order = await Order.findByIdAndDelete(req.params.id);
+    if (!order) {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+    res.json({ message: 'Order removed' });
+});
+
 const getOrderById = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id).populate('user', 'name email');
     if (order) {
@@ -60,5 +70,6 @@ module.exports = {
     getAllOrders,
     createOrder,
     updateOrderStatus,
+    deleteOrder,
     getOrderById,
 };

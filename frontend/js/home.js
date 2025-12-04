@@ -5,15 +5,19 @@ const productListEl = document.getElementById('product-list');
 // Hàm tải sản phẩm từ API
 async function loadProducts() {
     try {
-        const res = await fetch(`${API_BASE_URL}/products`);
+        const params = new URLSearchParams(window.location.search);
+        const cat = (params.get('category') || '').trim();
+        const qParam = (params.get('search') || '').trim().toLowerCase();
+
+        const url = cat ? `${API_BASE_URL}/products?category=${encodeURIComponent(cat)}` : `${API_BASE_URL}/products`;
+        const res = await fetch(url);
 
         if (!res.ok) throw new Error(`Lỗi HTTP: ${res.status}`);
 
         let products = await res.json();
 
         // Nếu có query search trong URL thì lọc sản phẩm
-        const params = new URLSearchParams(window.location.search);
-        const q = (params.get('search') || '').trim().toLowerCase();
+        const q = qParam;
         if (q) {
             products = products.filter(p => (p.name || '').toLowerCase().includes(q));
         }
@@ -41,6 +45,7 @@ function renderProducts(products) {
             <img src="${p.image || '/images/default.png'}" alt="${escapeHtml(p.name)}">
             <h3>${escapeHtml(p.name)}</h3>
             <p class="price">${formatPrice(p.price)}</p>
+            <p class="category">${escapeHtml(p.category || 'Khác')}</p>
             <button class="btn" >Xem chi tiết</button>
         </div>
     `).join('');
@@ -52,3 +57,10 @@ function viewProduct(id) {
 }
 
 document.addEventListener("DOMContentLoaded", loadProducts);
+
+// Category filter bar
+function applyCategoryFilter(cat) {
+    const params = new URLSearchParams(window.location.search);
+    if (cat) params.set('category', cat); else params.delete('category');
+    window.location.search = params.toString();
+}
